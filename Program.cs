@@ -31,6 +31,7 @@ builder.Host.UseSerilog();
 
 // Register services for dependency injection
 builder.Services.AddControllers();
+builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddScoped<IOcrService, OcrService>();
 
 // Add CORS policy
