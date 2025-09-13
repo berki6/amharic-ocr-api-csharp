@@ -105,7 +105,16 @@ public class OcrController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.ToString());
+            return StatusCode(500, new {
+                success = false,
+                error = ex.Message,
+                data = (object)null,
+                request = new {
+                    fileName = file?.FileName,
+                    fileSize = file?.Length,
+                    fileType = file?.ContentType
+                }
+            });
         }
         finally
         {
