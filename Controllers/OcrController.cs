@@ -89,7 +89,19 @@ public class OcrController : ControllerBase
 
             await System.IO.File.WriteAllTextAsync(outputFilePath, extractedText);
 
-            return Ok(new { OutputFile = outputFilePath, Text = extractedText });
+            return Ok(new {
+                success = true,
+                error = (string)null,
+                data = new {
+                    outputFile = outputFilePath,
+                    text = extractedText
+                },
+                request = new {
+                    fileName = file.FileName,
+                    fileSize = file.Length,
+                    fileType = file.ContentType
+                }
+            });
         }
         catch (Exception ex)
         {
