@@ -1,6 +1,17 @@
 # Amharic OCR API (C#)
 
-A robust RESTful API for extracting Amharic text from images and PDF files using IronOCR, built with ASP.NET Core.
+A robust RESTful API for extracting Amharic text from images and PDF files using IronOCR, b## Logging
+
+- Logs are written to the console and to `logs/ocr-api-<date>.log`.
+- Log level: Debug and above.
+- Includes request events, warnings, and errors.
+- **Centralized logging:** Logs are also sent to Seq ([http://localhost:5341](http://localhost:5341) by default) for monitoring and troubleshooting. In production, configure the Seq URL in `appsettings.json` or environment variables.
+
+## Monitoring
+
+- **Application Insights:** Integrated for monitoring performance, failures, and usage metrics.
+- Configure the connection string in `appsettings.json` for Azure Application Insights.
+- Set up alerts for high error rates, slow responses, or other issues.ith ASP.NET Core.
 
 ## Tags
 
@@ -18,6 +29,7 @@ A robust RESTful API for extracting Amharic text from images and PDF files using
 - Extracts text from images (JPG, PNG, GIF, TIFF, BMP) and PDFs
 - Preprocessing for improved OCR accuracy (deskew, denoise, enhance resolution)
 - Structured logging with Serilog (console, file, and centralized with Seq)
+- Monitoring and alerting with Application Insights
 - File upload validation (type, size)
 - HTTPS enforcement and CORS policies for security
 - Consistent, structured API responses
