@@ -33,6 +33,17 @@ builder.Host.UseSerilog();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IOcrService, OcrService>();
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", builder =>
+    {
+        builder.WithOrigins("https://yourfrontend.com") // Replace with actual allowed origins
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 // Add Swagger generation service
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -82,6 +93,8 @@ try
 	}
 
 	app.UseHttpsRedirection();
+	app.UseCors("AllowSpecificOrigins");
+	app.UseMiddleware<ExceptionHandlingMiddleware>();
 	app.UseAuthorization();
 	app.MapControllers();
 
