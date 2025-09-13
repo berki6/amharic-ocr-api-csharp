@@ -33,8 +33,6 @@ builder.Services.AddSwaggerGen(c =>
 		// }
 	});
 
-	// Enable file upload support in Swagger UI
-	c.OperationFilter<FileUploadOperationFilter>();
 });
 
 

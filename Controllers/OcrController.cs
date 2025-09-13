@@ -19,9 +19,10 @@ public class OcrController : ControllerBase
     }
 
     [HttpPost("extract")]
-    public async Task<IActionResult> ExtractText([FromForm] IFormFile file)
+    public async Task<IActionResult> ExtractText([FromForm] OcrExtractRequest request)
     {
 
+        var file = request.File;
 
         if (file == null)
             return BadRequest(new {
