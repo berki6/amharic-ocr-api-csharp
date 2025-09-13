@@ -17,8 +17,9 @@ A robust RESTful API for extracting Amharic text from images and PDF files using
 
 - Extracts text from images (JPG, PNG, GIF, TIFF, BMP) and PDFs
 - Preprocessing for improved OCR accuracy (deskew, denoise, enhance resolution)
-- Structured logging with Serilog (console and file)
+- Structured logging with Serilog (console, file, and centralized with Seq)
 - File upload validation (type, size)
+- HTTPS enforcement and CORS policies for security
 - Consistent, structured API responses
 - Swagger UI for interactive API documentation and testing
 - Secure configuration (no hardcoded secrets)
@@ -118,6 +119,7 @@ curl -X POST http://localhost:5000/api/ocr/extract -F "file=@/path/to/image-or-p
 - Logs are written to the console and to `logs/ocr-api-<date>.log`.
 - Log level: Debug and above.
 - Includes request events, warnings, and errors.
+- **Centralized logging:** Logs are also sent to Seq ([http://localhost:5341](http://localhost:5341) by default) for monitoring and troubleshooting. In production, configure the Seq URL in `appsettings.json` or environment variables.
 
 ## Testing
 
