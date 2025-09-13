@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 
+var builder = WebApplication.CreateBuilder(args);
+
 // Configure Serilog with more details
 Log.Logger = new LoggerConfiguration()
 	.MinimumLevel.Debug()
@@ -20,9 +22,8 @@ Log.Logger = new LoggerConfiguration()
 		fileSizeLimitBytes: 10_000_000,
 		rollOnFileSizeLimit: true
 	)
+	.WriteTo.Seq(builder.Configuration["Seq:Url"] ?? "http://localhost:5341") // Centralized logging to Seq (configure URL in production)
 	.CreateLogger();
-
-var builder = WebApplication.CreateBuilder(args);
 
 // Use Serilog as the logging provider
 builder.Host.UseSerilog();
