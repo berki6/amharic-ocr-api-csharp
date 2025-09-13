@@ -4,6 +4,9 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +36,33 @@ builder.Host.UseSerilog();
 builder.Services.AddControllers();
 builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddScoped<IOcrService, OcrService>();
+
+// Add JWT Authentication
+var jwtKey = builder.Configuration["Jwt:Key"];
+if (string.IsNullOrEmpty(jwtKey))
+{
+    throw new InvalidOperationException("JWT Key is not configured. Set the 'Jwt:Key' configuration value.");
+}
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+    };
+});
+
+// Add Authorization
+builder.Services.AddAuthorization();
 
 // Add CORS policy
 builder.Services.AddCors(options =>
@@ -95,6 +125,7 @@ try
 
 	app.UseHttpsRedirection();
 	app.UseCors("AllowSpecificOrigins");
+	app.UseAuthentication();
 	app.UseMiddleware<ExceptionHandlingMiddleware>();
 	app.UseAuthorization();
 	app.MapControllers();
