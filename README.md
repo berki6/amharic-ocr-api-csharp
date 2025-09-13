@@ -30,6 +30,7 @@ A robust RESTful API for extracting Amharic text from images and PDF files using
 - Preprocessing for improved OCR accuracy (deskew, denoise, enhance resolution)
 - Structured logging with Serilog (console, file, and centralized with Seq)
 - Monitoring and alerting with Application Insights
+- Authentication and authorization with JWT Bearer tokens
 - File upload validation (type, size)
 - HTTPS enforcement and CORS policies for security
 - Consistent, structured API responses
@@ -58,16 +59,14 @@ A robust RESTful API for extracting Amharic text from images and PDF files using
    dotnet restore
    ```
 
-3. **Configure your license key:**
-   - Edit `appsettings.json` and set your IronOCR license key:
-
-     ```json
-     {
-       "IronOcr": {
-         "LicenseKey": "YOUR_LICENSE_KEY"
-       }
-     }
-     ```
+3. **Configure environment variables:**
+   - Copy `appsettings.template.json` to `appsettings.json` and fill in your values, or set environment variables:
+     - `IronOcr__LicenseKey`: Your IronOCR license key
+     - `Seq__Url`: Seq server URL (e.g., `http://localhost:5341` for development)
+     - `ApplicationInsights__ConnectionString`: Azure Application Insights connection string
+     - `Jwt__Key`: A strong secret key for JWT signing (at least 256 bits)
+   - For development, you can use User Secrets: `dotnet user-secrets set "IronOcr:LicenseKey" "YOUR_KEY"`
+   - In production, set these as environment variables in your deployment platform (Azure App Service, Docker, etc.)
 
 4. **Build the project:**
 
