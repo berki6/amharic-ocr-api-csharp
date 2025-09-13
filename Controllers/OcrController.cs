@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 [ApiController]
 [Route("api/ocr")]
+
 public class OcrController : ControllerBase
 {
     private readonly IOcrService _ocrService;
+    private readonly string[] allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".tiff", ".bmp", ".pdf" };
+    private const long maxFileSize = 10 * 1024 * 1024; // 10 MB max
 
     // Use Dependency Injection to inject OcrService (interface recommended)
     public OcrController(IOcrService ocrService)
@@ -18,8 +21,56 @@ public class OcrController : ControllerBase
     [HttpPost("extract")]
     public async Task<IActionResult> ExtractText([FromForm] IFormFile file)
     {
-        if (file == null || file.Length == 0)
-            return BadRequest("Image or PDF file is required.");
+
+
+        if (file == null)
+            return BadRequest(new {
+                success = false,
+                error = "No file was uploaded. Please provide an image or PDF file.",
+                data = (object)null,
+                request = new {
+                    fileName = (string)null,
+                    fileSize = (long?)null,
+                    fileType = (string)null
+                }
+            });
+
+        if (file.Length == 0)
+            return BadRequest(new {
+                success = false,
+                error = "The uploaded file is empty. Please provide a valid image or PDF file.",
+                data = (object)null,
+                request = new {
+                    fileName = file.FileName,
+                    fileSize = file.Length,
+                    fileType = file.ContentType
+                }
+            });
+
+        var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+        if (!allowedExtensions.Contains(ext))
+            return BadRequest(new {
+                success = false,
+                error = $"Unsupported file type: {ext}. Allowed types: {string.Join(", ", allowedExtensions)}",
+                data = (object)null,
+                request = new {
+                    fileName = file.FileName,
+                    fileSize = file.Length,
+                    fileType = file.ContentType
+                }
+            });
+
+        if (file.Length > maxFileSize)
+            return BadRequest(new {
+                success = false,
+                error = $"File size exceeds the maximum allowed size of {maxFileSize / (1024 * 1024)} MB.",
+                data = (object)null,
+                request = new {
+                    fileName = file.FileName,
+                    fileSize = file.Length,
+                    fileType = file.ContentType
+                }
+            });
 
         var tempFilePath = Path.GetTempFileName();
         var outputDir = Path.Combine(Directory.GetCurrentDirectory(), "output");
