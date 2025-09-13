@@ -16,22 +16,22 @@ public class OcrController : ControllerBase
     }
 
     [HttpPost("extract")]
-    public async Task<IActionResult> ExtractText([FromForm] IFormFile image)
+    public async Task<IActionResult> ExtractText([FromForm] IFormFile file)
     {
-        if (image == null || image.Length == 0)
-            return BadRequest("Image file is required.");
+        if (file == null || file.Length == 0)
+            return BadRequest("Image or PDF file is required.");
 
         var tempFilePath = Path.GetTempFileName();
         var outputDir = Path.Combine(Directory.GetCurrentDirectory(), "output");
         Directory.CreateDirectory(outputDir);
-        string outputFileName = Path.GetFileNameWithoutExtension(image.FileName) + ".txt";
+        string outputFileName = Path.GetFileNameWithoutExtension(file.FileName) + ".txt";
         string outputFilePath = Path.Combine(outputDir, outputFileName);
 
         try
         {
             using (var stream = new FileStream(tempFilePath, FileMode.Create))
             {
-                await image.CopyToAsync(stream);
+                await file.CopyToAsync(stream);
             }
 
             var extractedText = await _ocrService.ExtractTextFromImageAsync(tempFilePath);
