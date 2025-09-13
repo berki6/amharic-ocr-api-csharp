@@ -6,7 +6,7 @@ appsettings.json
 ## Get latest from `dotnet new gitignore`
 
 # Additional files to ignore for Visual Studio code
-.vscode/
+# .vscode/
 output/*
 
 # dotenv files
