@@ -78,6 +78,26 @@ public class FileUploadOperationFilter : Swashbuckle.AspNetCore.SwaggerGen.IOper
 var app = builder.Build();
 
 
+// Enable Swagger UI only in development
+if (app.Environment.IsDevelopment())
+{
+	app.UseSwagger();
+	app.UseSwaggerUI(c =>
+	{
+		c.SwaggerEndpoint("/swagger/v1/swagger.json", "Amharic OCR API v1");
+		c.DocumentTitle = "Amharic OCR API Documentation";
+		c.RoutePrefix = "swagger";
+		c.DefaultModelsExpandDepth(-1); // Hide schemas/models by default
+		c.DisplayRequestDuration();
+		c.EnableFilter();
+		c.InjectStylesheet("/swagger-ui/custom.css"); // For custom CSS if needed
+	});
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
