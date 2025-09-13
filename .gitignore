@@ -17,6 +17,7 @@ output/*
 Todo.md
 deployment-Todo.md
 Notes.md
+jwt.py
 
 # dotenv files
 .env
