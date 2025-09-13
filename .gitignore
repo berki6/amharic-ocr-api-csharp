@@ -8,6 +8,7 @@ appsettings.json
 # Additional files to ignore for Visual Studio code
 # .vscode/
 output/*
+Todo.md
 
 # dotenv files
 .env
