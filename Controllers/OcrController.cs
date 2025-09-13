@@ -27,11 +27,11 @@ public class OcrController : ControllerBase
             return BadRequest(new {
                 success = false,
                 error = "No file was uploaded. Please provide an image or PDF file.",
-                data = (object)null,
+                data = string.Empty,
                 request = new {
-                    fileName = (string)null,
-                    fileSize = (long?)null,
-                    fileType = (string)null
+                    fileName = string.Empty,
+                    fileSize = 0L,
+                    fileType = string.Empty
                 }
             });
 
@@ -39,11 +39,11 @@ public class OcrController : ControllerBase
             return BadRequest(new {
                 success = false,
                 error = "The uploaded file is empty. Please provide a valid image or PDF file.",
-                data = (object)null,
+                data = string.Empty,
                 request = new {
-                    fileName = file.FileName,
+                    fileName = file.FileName ?? string.Empty,
                     fileSize = file.Length,
-                    fileType = file.ContentType
+                    fileType = file.ContentType ?? string.Empty
                 }
             });
 
@@ -52,11 +52,11 @@ public class OcrController : ControllerBase
             return BadRequest(new {
                 success = false,
                 error = $"Unsupported file type: {ext}. Allowed types: {string.Join(", ", allowedExtensions)}",
-                data = (object)null,
+                data = string.Empty,
                 request = new {
-                    fileName = file.FileName,
+                    fileName = file.FileName ?? string.Empty,
                     fileSize = file.Length,
-                    fileType = file.ContentType
+                    fileType = file.ContentType ?? string.Empty
                 }
             });
 
@@ -64,11 +64,11 @@ public class OcrController : ControllerBase
             return BadRequest(new {
                 success = false,
                 error = $"File size exceeds the maximum allowed size of {maxFileSize / (1024 * 1024)} MB.",
-                data = (object)null,
+                data = string.Empty,
                 request = new {
-                    fileName = file.FileName,
+                    fileName = file.FileName ?? string.Empty,
                     fileSize = file.Length,
-                    fileType = file.ContentType
+                    fileType = file.ContentType ?? string.Empty
                 }
             });
 
@@ -91,15 +91,15 @@ public class OcrController : ControllerBase
 
             return Ok(new {
                 success = true,
-                error = (string)null,
+                error = string.Empty,
                 data = new {
                     outputFile = outputFilePath,
                     text = extractedText
                 },
                 request = new {
-                    fileName = file.FileName,
+                    fileName = file.FileName ?? string.Empty,
                     fileSize = file.Length,
-                    fileType = file.ContentType
+                    fileType = file.ContentType ?? string.Empty
                 }
             });
         }
@@ -107,12 +107,12 @@ public class OcrController : ControllerBase
         {
             return StatusCode(500, new {
                 success = false,
-                error = ex.Message,
-                data = (object)null,
+                error = ex.Message ?? string.Empty,
+                data = string.Empty,
                 request = new {
-                    fileName = file?.FileName,
-                    fileSize = file?.Length,
-                    fileType = file?.ContentType
+                    fileName = file?.FileName ?? string.Empty,
+                    fileSize = file?.Length ?? 0L,
+                    fileType = file?.ContentType ?? string.Empty
                 }
             });
         }
