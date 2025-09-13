@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -6,11 +7,12 @@ using System.Threading.Tasks;
 [Route("api/ocr")]
 public class OcrController : ControllerBase
 {
-    private readonly OcrService _ocrService;
+    private readonly IOcrService _ocrService;
 
-    public OcrController()
+    // Use Dependency Injection to inject OcrService (interface recommended)
+    public OcrController(IOcrService ocrService)
     {
-        _ocrService = new OcrService();
+        _ocrService = ocrService ?? throw new ArgumentNullException(nameof(ocrService));
     }
 
     [HttpPost("extract")]
@@ -20,16 +22,34 @@ public class OcrController : ControllerBase
             return BadRequest("Image file is required.");
 
         var tempFilePath = Path.GetTempFileName();
+        var outputDir = Path.Combine(Directory.GetCurrentDirectory(), "output");
+        Directory.CreateDirectory(outputDir);
+        string outputFileName = Path.GetFileNameWithoutExtension(image.FileName) + ".txt";
+        string outputFilePath = Path.Combine(outputDir, outputFileName);
 
-        using (var stream = new FileStream(tempFilePath, FileMode.Create))
+        try
         {
-            await image.CopyToAsync(stream);
+            using (var stream = new FileStream(tempFilePath, FileMode.Create))
+            {
+                await image.CopyToAsync(stream);
+            }
+
+            var extractedText = await _ocrService.ExtractTextFromImageAsync(tempFilePath);
+
+            await System.IO.File.WriteAllTextAsync(outputFilePath, extractedText);
+
+            return Ok(new { OutputFile = outputFilePath, Text = extractedText });
         }
-
-        var extractedText = _ocrService.ExtractTextFromImage(tempFilePath);
-
-        System.IO.File.Delete(tempFilePath);
-
-        return Ok(new { Text = extractedText });
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.ToString());
+        }
+        finally
+        {
+            if (System.IO.File.Exists(tempFilePath))
+            {
+                System.IO.File.Delete(tempFilePath);
+            }
+        }
     }
 }
