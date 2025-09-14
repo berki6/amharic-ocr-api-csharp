@@ -25,8 +25,16 @@ Log.Logger = new LoggerConfiguration()
 		fileSizeLimitBytes: 10_000_000,
 		rollOnFileSizeLimit: true
 	)
-	.WriteTo.Seq(builder.Configuration["Seq:Url"] ?? "http://localhost:5341") // Centralized logging to Seq (configure URL in production)
 	.CreateLogger();
+
+// Conditionally add Seq sink if URL is configured
+if (!string.IsNullOrEmpty(builder.Configuration["Seq:Url"]))
+{
+	Log.Logger = new LoggerConfiguration()
+		.WriteTo.Logger(Log.Logger)
+		.WriteTo.Seq(builder.Configuration["Seq:Url"]!)
+		.CreateLogger();
+}
 
 // Use Serilog as the logging provider
 builder.Host.UseSerilog();
@@ -39,27 +47,31 @@ builder.Services.AddScoped<IOcrService, OcrService>();
 
 // Add JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"];
-if (string.IsNullOrEmpty(jwtKey))
+if (string.IsNullOrEmpty(jwtKey) && !builder.Environment.IsDevelopment())
 {
     throw new InvalidOperationException("JWT Key is not configured. Set the 'Jwt:Key' configuration value.");
 }
-builder.Services.AddAuthentication(options =>
+if (!string.IsNullOrEmpty(jwtKey))
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
+    var issuer = builder.Configuration["Jwt:Issuer"] ?? "AmharicOCRAPI";
+    builder.Services.AddAuthentication(options =>
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Issuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-    };
-});
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    }).AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = issuer,
+            ValidAudience = issuer,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        };
+    });
+}
 
 // Add Authorization
 builder.Services.AddAuthorization();
@@ -142,5 +154,7 @@ finally
 {
 	Log.CloseAndFlush();
 }
+
+public partial class Program { }
 
 
