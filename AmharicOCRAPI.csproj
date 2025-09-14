@@ -5,6 +5,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>7a455e37-b2dd-4912-be99-50c626814b6f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +25,7 @@
 
   <ItemGroup>
     <Compile Remove="AmharicOCRAPI.Tests\**" />
+    <Compile Remove="JwtGenerator\**" />
   </ItemGroup>
 
 </Project>

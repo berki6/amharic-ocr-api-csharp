@@ -18,6 +18,7 @@ Todo.md
 deployment-Todo.md
 Notes.md
 jwt.py
+JwtGenerator/
 
 # dotenv files
 .env
