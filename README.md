@@ -15,6 +15,7 @@ A robust RESTful API for extracting Amharic text from images and PDF files using
 
 ## Tags
 
+![Build Status](https://github.com/berki6/amharic-ocr-api-csharp/actions/workflows/dotnet.yml/badge.svg)
 ![.NET 8](https://img.shields.io/badge/.NET-8.0-blueviolet)
 ![C#](https://img.shields.io/badge/language-C%23-239120)
 ![IronOCR](https://img.shields.io/badge/IronOCR-OCR-green)
@@ -171,6 +172,10 @@ dotnet watch test
 - **File Upload Validation**: Type, size, and content validation for security
 - **Secure Configuration**: Environment variables and user secrets (no hardcoded secrets)
 
+### ✅ Implemented Production Features
+
+- **CI/CD Pipeline**: GitHub Actions workflow for automated building and testing (deployment pending)
+
 ### 🔄 Recommended for Production
 
 - **Rate Limiting**: Implement request throttling to prevent abuse (consider ASP.NET Core Rate Limiting)
@@ -178,7 +183,6 @@ dotnet watch test
 - **Health Checks**: Add `/health` endpoint for monitoring service status
 - **Security Headers**: Implement security middleware for headers like HSTS, CSP, X-Frame-Options
 - **Containerization**: Docker support for consistent deployment
-- **CI/CD Pipeline**: Automated testing, building, and deployment (GitHub Actions recommended)
 
 ### ⚠️ Important Notes
 
