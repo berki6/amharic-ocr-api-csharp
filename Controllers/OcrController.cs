@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 [ApiController]
 [Route("api/ocr")]
 [Authorize]
+// [Authorize] // Disable for testing - authentication can be added back when needed
 
 public class OcrController : ControllerBase
 {
