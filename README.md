@@ -134,13 +134,58 @@ curl -X POST http://localhost:5000/api/ocr/extract -F "file=@/path/to/image-or-p
 
 ## Testing
 
-- (Recommended) Add unit and integration tests using xUnit and Moq.
+- Comprehensive test suite implemented with xUnit, Moq, and Microsoft.AspNetCore.Mvc.Testing
+- **Unit Tests**: Test core OCR service logic with mocked dependencies
+- **Integration Tests**: Validate API endpoints, file validation, and error handling
+- **End-to-End Tests**: Test complete workflows with JWT authentication and file uploads
+
+### Running Tests
+
+```sh
+# Run all tests in the solution
+dotnet test
+
+# Or specify the solution file explicitly
+dotnet test AmharicOCRAPI.sln
+
+# Run tests for the specific test project
+dotnet test AmharicOCRAPI.Tests/AmharicOCRAPI.Tests.csproj
+
+# Run with detailed output
+dotnet test --verbosity normal
+
+# Run specific test class
+dotnet test --filter "OcrServiceTests"
+
+# Run tests in watch mode (re-runs on code changes)
+dotnet watch test
+```
 
 ## Security & Production
 
-- Add authentication/authorization for public deployments.
-- Consider rate limiting and HTTPS enforcement.
-- Never commit your real license key or secrets to version control.
+### ✅ Implemented Security Features
+
+- **JWT Authentication/Authorization**: Bearer token authentication with configurable keys
+- **HTTPS Enforcement**: Automatic redirection to secure connections
+- **CORS Policies**: Configured for cross-origin requests with specific origins
+- **File Upload Validation**: Type, size, and content validation for security
+- **Secure Configuration**: Environment variables and user secrets (no hardcoded secrets)
+
+### 🔄 Recommended for Production
+
+- **Rate Limiting**: Implement request throttling to prevent abuse (consider ASP.NET Core Rate Limiting)
+- **API Versioning**: Add version headers for backward compatibility
+- **Health Checks**: Add `/health` endpoint for monitoring service status
+- **Security Headers**: Implement security middleware for headers like HSTS, CSP, X-Frame-Options
+- **Containerization**: Docker support for consistent deployment
+- **CI/CD Pipeline**: Automated testing, building, and deployment (GitHub Actions recommended)
+
+### ⚠️ Important Notes
+
+- Never commit real license keys or secrets to version control
+- Use strong, unique JWT signing keys (minimum 256 bits)
+- Regularly rotate secrets and monitor for security vulnerabilities
+- Consider penetration testing before production deployment
 
 <!-- ## Contributing
 
