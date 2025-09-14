@@ -128,13 +128,6 @@ curl -X POST http://localhost:5000/api/ocr/extract -F "file=@/path/to/image-or-p
 
 - Returns structured error JSON with details and request metadata.
 
-## Logging
-
-- Logs are written to the console and to `logs/ocr-api-<date>.log`.
-- Log level: Debug and above.
-- Includes request events, warnings, and errors.
-- **Centralized logging:** Logs are also sent to Seq ([http://localhost:5341](http://localhost:5341) by default) for monitoring and troubleshooting. In production, configure the Seq URL in `appsettings.json` or environment variables.
-
 ## Testing
 
 - Comprehensive test suite implemented with xUnit, Moq, and Microsoft.AspNetCore.Mvc.Testing
