@@ -13,10 +13,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configure Serilog with more details
 Log.Logger = new LoggerConfiguration()
-	.MinimumLevel.Debug()
+	.MinimumLevel.Information()
+	// .MinimumLevel.Debug()
 	.Enrich.FromLogContext()
 	.Enrich.WithProperty("Application", "AmharicOCRAPI")
-	.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}")
+	.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+	// .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}")
 	.WriteTo.File(
 		path: "logs/ocr-api-.log",
 		rollingInterval: RollingInterval.Day,
