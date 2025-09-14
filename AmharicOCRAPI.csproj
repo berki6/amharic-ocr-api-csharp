@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="AmharicOCRAPI.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="IronOCR" Version="2025.9.7" />
     <PackageReference Include="IronOCR.Languages.Amharic" Version="2020.11.2" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
@@ -16,6 +20,10 @@
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="AmharicOCRAPI.Tests\**" />
   </ItemGroup>
 
 </Project>
