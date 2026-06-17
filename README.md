@@ -186,7 +186,3 @@ Pull requests and issues are welcome! Please open an issue to discuss major chan
 ## License
 
 <!-- MIT (see LICENSE file) --> Pending.
-
-## Authors
-
-- [berki6](https://github.com/berki6)
