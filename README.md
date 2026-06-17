@@ -179,20 +179,13 @@ dotnet watch test
 - **Security Headers**: Implement security middleware for headers like HSTS, CSP, X-Frame-Options
 - **Containerization**: Docker support for consistent deployment
 
-### ⚠️ Important Notes
-
-- Never commit real license keys or secrets to version control
-- Use strong, unique JWT signing keys (minimum 256 bits)
-- Regularly rotate secrets and monitor for security vulnerabilities
-- Consider penetration testing before production deployment
-
 <!-- ## Contributing
 
 Pull requests and issues are welcome! Please open an issue to discuss major changes. -->
 
 ## License
 
-<!-- MIT (see LICENSE file) --> Not implemented yet.
+<!-- MIT (see LICENSE file) --> Pending.
 
 ## Authors
 
